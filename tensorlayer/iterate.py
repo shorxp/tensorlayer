@@ -56,7 +56,7 @@ def seq_minibatches(inputs, targets, batch_size, seq_length, stride=1):
     `Karpathy RNN Blog <http://karpathy.github.io/2015/05/21/rnn-effectiveness/>`_
     shows.
 
-    If batch_size = 100, seq_length = 5, a return input will have 500 rows (examples).
+    If ``batch_size = 100, seq_length = 5``, one return will have ``500`` rows (examples).
 
     Examples
     --------
@@ -151,7 +151,7 @@ def ptb_iterator(raw_data, batch_size, num_steps):
     >>> train_data = [i for i in range(20)]
     >>> for batch in ptb_iterator(train_data, batch_size=2, num_steps=3):
     >>>     x, y = batch
-    >>>     print(x, "\n",y)
+    >>>     print(x, y)
     ... [[ 0  1  2] <---x                       1st subset/ iteration
     ...  [10 11 12]]
     ... [[ 1  2  3] <---y

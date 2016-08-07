@@ -42,10 +42,10 @@ def generate_skip_gram_batch(data, batch_size, num_skips, skip_window, data_inde
     data_index : an int
         Index of the context location.
 
-    Example
+    Examples
     --------
-    Setting num_skips=2, skip_window=1, use the right and left words.
-    In the same way, num_skips=4, skip_window=2 means use the nearby 4 words.
+    >>> Setting num_skips=2, skip_window=1, use the right and left words.
+    >>> In the same way, num_skips=4, skip_window=2 means use the nearby 4 words.
 
     >>> data = [1,2,3,4,5,6,7,8,9,10,11]
     >>> batch, labels, data_index = tl.nlp.generate_skip_gram_batch(    \
@@ -101,11 +101,11 @@ def sample(a=[], temperature=1.0):
     a : a list
         List of probabilities.
     temperature : float or None
-        The higher the more uniform.
-        When a = [0.1, 0.2, 0.7],
-            temperature = 0.7, the distribution will be sharpen [ 0.05048273  0.13588945  0.81362782]
-            temperature = 1.0, the distribution will be the same [0.1    0.2    0.7]
-            temperature = 1.5, the distribution will be filtered [ 0.16008435  0.25411807  0.58579758]
+        The higher the more uniform.\n
+        When a = [0.1, 0.2, 0.7],\n
+            temperature = 0.7, the distribution will be sharpen [ 0.05048273  0.13588945  0.81362782]\n
+            temperature = 1.0, the distribution will be the same [0.1    0.2    0.7]\n
+            temperature = 1.5, the distribution will be filtered [ 0.16008435  0.25411807  0.58579758]\n
         If None, it will be ``np.argmax(a)``
 
     Note
@@ -162,6 +162,15 @@ def sample_top(a=[], top_k=10):
 ## Vector representations of words
 def simple_read_words(filename="nietzsche.txt"):
     """Read context from file without any preprocessing.
+    
+    Parameters
+    ----------
+    filename : a string
+        A file path (like .txt file)
+    
+    Returns
+    --------
+    The context in a string
     """
     with open("nietzsche.txt", "r") as f:
         words = f.read()
@@ -169,7 +178,7 @@ def simple_read_words(filename="nietzsche.txt"):
 
 def read_words(filename="nietzsche.txt", replace = ['\n', '<eos>']):
     """File to list format context.
-    Note that: this script can not handle punctuations.
+    Note that, this script can not handle punctuations.
     For customized read_words method, see ``tutorial_generate_text.py``.
 
     Parameters
@@ -195,16 +204,21 @@ def read_words(filename="nietzsche.txt", replace = ['\n', '<eos>']):
 def read_analogies_file(eval_file='questions-words.txt', word2id={}):
     """Reads through an analogy question file, return its id format.
 
+    Parameters
+    ----------
     eval_data : a string
         The file name.
     word2id : a dictionary
         Mapping words to unique IDs.
-    Returns:
-    questions: a [n, 4] numpy array containing the analogy question's
+        
+        
+    Return
+    --------
+    analogy_questions : a [n, 4] numpy array containing the analogy question's
              word ids.
              questions_skipped: questions skipped due to unknown words.
 
-    Example
+    Examples
     -------
     >>> eval_file should be in this format :
     >>> : capital-common-countries
@@ -253,9 +267,9 @@ def read_analogies_file(eval_file='questions-words.txt', word2id={}):
 
 def build_vocab(data):
     """Build vocabulary.
-        Given the context in list format
-        Return the vocabulary, which is a dictionary for word to id.
-        e.g. {'campbell': 2587, 'atlantic': 2247, 'aoun': 6746 .... }
+    Given the context in list format.
+    Return the vocabulary, which is a dictionary for word to id.
+    e.g. {'campbell': 2587, 'atlantic': 2247, 'aoun': 6746 .... }
 
     Parameters
     ----------
@@ -265,8 +279,7 @@ def build_vocab(data):
     Returns
     --------
     word_to_id : a dictionary
-        mapping words to unique IDs.
-        e.g. {'campbell': 2587, 'atlantic': 2247, 'aoun': 6746 .... }
+        mapping words to unique IDs. e.g. {'campbell': 2587, 'atlantic': 2247, 'aoun': 6746 .... }
 
     Code References
     ---------------
@@ -292,6 +305,17 @@ def build_vocab(data):
 def build_reverse_dictionary(word_to_id):
     """Given a dictionary for converting word to integer id.
     Returns a reverse dictionary for converting a id to word.
+    
+    Parameters
+    ----------
+    word_to_id : dictionary
+        mapping words to unique ids
+
+    Returns
+    --------
+    reverse_dictionary : a dictionary
+        mapping ids to words
+    
     """
     reverse_dictionary = dict(zip(word_to_id.values(), word_to_id.keys()))
     return reverse_dictionary
@@ -318,10 +342,9 @@ def build_words_dataset(words=[], vocabulary_size=50000, printable=True, unk_key
     data : a list of integer
         The context in a list of ids
     count : a list of tuple and list
-        count[0] is a list : the number of rare words
-        count[1:] are tuples : the number of occurrence of each word
-        e.g. [['UNK', 418391], (b'the', 1061396), (b'of', 593677),
-                                        (b'and', 416629), (b'one', 411764)]
+        count[0] is a list : the number of rare words\n
+        count[1:] are tuples : the number of occurrence of each word\n
+        e.g. [['UNK', 418391], (b'the', 1061396), (b'of', 593677), (b'and', 416629), (b'one', 411764)]
     dictionary : a dictionary
         word_to_id, mapping words to unique IDs.
     reverse_dictionary : a dictionary
@@ -332,8 +355,7 @@ def build_words_dataset(words=[], vocabulary_size=50000, printable=True, unk_key
     --------
     >>> words = tl.files.load_matt_mahoney_text8_dataset()
     >>> vocabulary_size = 50000
-    >>> data, count, dictionary, reverse_dictionary = \
-    ...     tl.nlp.build_words_dataset(words, vocabulary_size)
+    >>> data, count, dictionary, reverse_dictionary = tl.nlp.build_words_dataset(words, vocabulary_size)
 
     Code References
     -----------------
@@ -380,7 +402,7 @@ def words_to_word_ids(data=[], word_to_id={}, unk_key = 'UNK'):
     --------
     A list of IDs to represent the context.
 
-    Example
+    Examples
     --------
     >>> words = tl.files.load_matt_mahoney_text8_dataset()
     >>> vocabulary_size = 50000
@@ -440,7 +462,7 @@ def word_ids_to_words(data, id_to_word):
 
     Examples
     ---------
-    see words_to_word_ids
+    >>> see words_to_word_ids
     """
     return [id_to_word[i] for i in data]
 
@@ -450,10 +472,9 @@ def save_vocab(count=[], name='vocab.txt'):
     Parameters
     ----------
     count : a list of tuple and list
-        count[0] is a list : the number of rare words
-        count[1:] are tuples : the number of occurrence of each word
-        e.g. [['UNK', 418391], (b'the', 1061396), (b'of', 593677),
-                                        (b'and', 416629), (b'one', 411764)]
+        count[0] is a list : the number of rare words\n
+        count[1:] are tuples : the number of occurrence of each word\n
+        e.g. [['UNK', 418391], (b'the', 1061396), (b'of', 593677), (b'and', 416629), (b'one', 411764)]
 
     Examples
     ---------
@@ -488,10 +509,10 @@ def basic_tokenizer(sentence, _WORD_SPLIT=re.compile(b"([.,!?\"':;)(])")):
   sentence : tensorflow.python.platform.gfile.GFile Object
   _WORD_SPLIT : regular expression for word spliting.
 
-  see create_vocabulary
-
+  
   Examples
   --------
+  >>> see create_vocabulary
   >>> from tensorflow.python.platform import gfile
   >>> train_path = "wmt/giga-fren.release2"
   >>> with gfile.GFile(train_path + ".en", mode="rb") as f:
@@ -528,12 +549,12 @@ def create_vocabulary(vocabulary_path, data_path, max_vocabulary_size,
 
   Parameters
   -----------
-    vocabulary_path : path where the vocabulary will be created.
-    data_path : data file that will be used to create vocabulary.
-    max_vocabulary_size : limit on the size of the created vocabulary.
-    tokenizer : a function to use to tokenize each data sentence;
+  vocabulary_path : path where the vocabulary will be created.
+  data_path : data file that will be used to create vocabulary.
+  max_vocabulary_size : limit on the size of the created vocabulary.
+  tokenizer : a function to use to tokenize each data sentence.
         if None, basic_tokenizer will be used.
-    normalize_digits : Boolean
+  normalize_digits : Boolean
         if true, all digits are replaced by 0s.
 
   References
@@ -577,21 +598,18 @@ def initialize_vocabulary(vocabulary_path):
 
   Parameters
   -----------
-    vocabulary_path : path to the file containing the vocabulary.
+  vocabulary_path : path to the file containing the vocabulary.
 
   Returns
   --------
-    a pair: the vocabulary (a dictionary mapping string to integers), and
-    the reversed vocabulary (a list, which reverses the vocabulary mapping).
-
-    vocab : a dictionary
-        Word to id.
-    rev_vocab : a list
-        Id to word.
+  vocab : a dictionary
+        Word to id. A dictionary mapping string to integers.
+  rev_vocab : a list
+        Id to word. The reversed vocabulary (a list, which reverses the vocabulary mapping).
 
   Examples
   --------
-  ... Assume 'test' contains
+  >>> Assume 'test' contains
   ... dog
   ... cat
   ... bird
@@ -603,7 +621,7 @@ def initialize_vocabulary(vocabulary_path):
 
   Raises
   -------
-    ValueError: if the provided vocabulary_path does not exist.
+  ValueError: if the provided vocabulary_path does not exist.
   """
   if gfile.Exists(vocabulary_path):
     rev_vocab = []
@@ -626,18 +644,18 @@ def sentence_to_token_ids(sentence, vocabulary,
 
   Parameters
   -----------
-    sentence :  tensorflow.python.platform.gfile.GFile Object
+  sentence :  tensorflow.python.platform.gfile.GFile Object
         The sentence in bytes format to convert to token-ids.\n
         see basic_tokenizer(), data_to_token_ids()
-    vocabulary : a dictionary mapping tokens to integers.
-    tokenizer : a function to use to tokenize each sentence;
+  vocabulary : a dictionary mapping tokens to integers.
+  tokenizer : a function to use to tokenize each sentence;
         If None, basic_tokenizer will be used.
-    normalize_digits : Boolean
+  normalize_digits : Boolean
         If true, all digits are replaced by 0s.
 
   Returns
   --------
-    A list of integers, the token-ids for the sentence.
+  A list of integers, the token-ids for the sentence.
   """
 
   if tokenizer:
@@ -660,12 +678,12 @@ def data_to_token_ids(data_path, target_path, vocabulary_path,
 
   Parameters
   -----------
-    data_path: path to the data file in one-sentence-per-line format.
-    target_path: path where the file with token-ids will be created.
-    vocabulary_path: path to the vocabulary file.
-    tokenizer: a function to use to tokenize each sentence;
+  data_path: path to the data file in one-sentence-per-line format.
+  target_path: path where the file with token-ids will be created.
+  vocabulary_path: path to the vocabulary file.
+  tokenizer: a function to use to tokenize each sentence;
       if None, basic_tokenizer will be used.
-    normalize_digits: Boolean; if true, all digits are replaced by 0s.
+  normalize_digits: Boolean; if true, all digits are replaced by 0s.
 
   References
   ----------
